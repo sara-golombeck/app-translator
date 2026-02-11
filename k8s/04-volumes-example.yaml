@@ -90,9 +90,9 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
-  clusterIP: None
+  clusterIP: ???
   selector:
     app: postgres
   ports:
-  - port: 5432
-    targetPort: 5432
+  - port: ???
+    targetPort: ???
