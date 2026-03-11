@@ -1,0 +1,13 @@
+apiVersion: v2
+name: app-translator
+description: A Helm chart for App Translator - Exercise for students
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - translator
+  - kubernetes
+  - exercise
+maintainers:
+  - name: Your Name
+    email: your.email@example.com

@@ -1,0 +1,37 @@
+# ========================================
+# EXERCISE: Fill in the missing values
+# ========================================
+# Replace all ??? with appropriate values
+# ========================================
+
+backend:
+  image: ???  # Enter the Backend image name (example: username/app-translator-backend:latest)
+  replicas: ???  # How many replicas? (recommended: 2)
+  port: ???  # Which port does Backend run on? (hint: 3001)
+
+frontend:
+  image: ???  # Enter the Frontend image name
+  replicas: ???  # How many replicas? (recommended: 2)
+  port: ???  # Which port does Frontend run on? (hint: 80)
+
+translator:
+  image: ???  # Enter the Translator image name (hint: libretranslate/libretranslate:latest)
+  replicas: ???  # How many replicas? (recommended: 1)
+  port: ???  # Which port does Translator run on? (hint: 5000)
+  resources:
+    requests:
+      memory: ???  # Memory request (example: "1Gi")
+      cpu: ???  # CPU request (example: "500m")
+    limits:
+      memory: ???  # Memory limit (example: "4Gi")
+      cpu: ???  # CPU limit (example: "2000m")
+
+database:
+  name: ???  # Database name (example: translations)
+  user: ???  # Database user (example: postgres)
+  password: ???  # Database password (example: postgres)
+  storage: ???  # Storage size (example: 10Gi)
+
+ingress:
+  enabled: ???  # Enable Ingress? (true/false)
+  host: ???  # Host name (example: translator.local)
