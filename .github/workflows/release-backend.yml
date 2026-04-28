@@ -8,6 +8,7 @@ on:
     branches: [main, ci/cd]
     paths:
       - 'backend/**'
+      - '.github/workflows/release-backend.yml'
 
 jobs:
   release:
