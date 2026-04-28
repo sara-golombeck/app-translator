@@ -1,5 +1,8 @@
 name: Backend CI
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [main, develop, ci/cd]
@@ -17,6 +20,15 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(cat backend/VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Building version: $VERSION"
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -34,6 +46,17 @@ jobs:
           push: true
           tags: |
             sara3259/app-translator-backend:latest
+            sara3259/app-translator-backend:v${{ steps.version.outputs.VERSION }}
             sara3259/app-translator-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      
+      - name: Create and push git tag
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "backend-v${{ steps.version.outputs.VERSION }}" -m "Backend release v${{ steps.version.outputs.VERSION }}"
+          git push origin "backend-v${{ steps.version.outputs.VERSION }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
