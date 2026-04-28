@@ -31,7 +31,8 @@ jobs:
             PATCH=$((PATCH + 1))
             NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           fi
-          
+
+
           echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
       
       - name: Set up Docker Buildx
