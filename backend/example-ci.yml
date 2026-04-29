@@ -1,0 +1,33 @@
+name: Backend CI - Step 2
+
+on:
+  push:
+    branches: [main, ci/dev]
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - run: npm install
+        working-directory: ./backend
+
+      - run: npm test
+        working-directory: ./backend
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: echo "Build Docker image"
