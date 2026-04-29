@@ -117,8 +117,6 @@ jobs:
           tags: |
             sara3259/app-translator-backend:latest
             sara3259/app-translator-backend:${{ github.sha }}
-
-
   tagging:
     name: Create Git Tag
     runs-on: ubuntu-latest
