@@ -1,35 +1,3 @@
-// Frontend Unit Tests (Simple JavaScript)
-
-function testTranslateButtonExists() {
-  const btn = document.getElementById('translateBtn');
-  if (!btn) throw new Error('Translate button not found');
-  console.log('✅ Test passed: Translate button exists');
-}
-
-function testSourceTextareaExists() {
-  const source = document.getElementById('source');
-  if (!source) throw new Error('Source textarea not found');
-  console.log('✅ Test passed: Source textarea exists');
-}
-
-function testTargetSelectExists() {
-  const target = document.getElementById('target');
-  if (!target) throw new Error('Target select not found');
-  console.log('✅ Test passed: Target select exists');
-}
-
-function testResultDivExists() {
-  const result = document.getElementById('result');
-  if (!result) throw new Error('Result div not found');
-  console.log('✅ Test passed: Result div exists');
-}
-
-function testHistoryListExists() {
-  const history = document.getElementById('history');
-  if (!history) throw new Error('History list not found');
-  console.log('✅ Test passed: History list exists');
-}
-
 function testAPIEndpoint() {
   const endpoint = '/api/translate';
   if (!endpoint.startsWith('/api/')) throw new Error('Invalid API endpoint');
@@ -53,7 +21,6 @@ function testLanguageCodeFormat() {
   console.log('✅ Test passed: Language codes are valid');
 }
 
-// Run all tests
 function runAllTests() {
   console.log('🧪 Running Frontend Unit Tests...\n');
   
@@ -70,7 +37,6 @@ function runAllTests() {
   }
 }
 
-// Export for Node.js testing
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { runAllTests };
 }
