@@ -1,0 +1,29 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [main, develop, ci/cd]
+  pull_request:
+    branches: [main]
+
+jobs:
+  integration-test:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run tests with Docker Compose
+        run: |
+          docker-compose -f docker-compose.test.yml up \
+            --abort-on-container-exit \
+            --exit-code-from backend-test
+      
+      - name: Show test logs
+        if: always()
+        run: docker-compose -f docker-compose.test.yml logs
+      
+      - name: Cleanup
+        if: always()
+        run: docker-compose -f docker-compose.test.yml down -v
