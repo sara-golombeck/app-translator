@@ -117,3 +117,50 @@ jobs:
           tags: |
             sara3259/app-translator-backend:latest
             sara3259/app-translator-backend:${{ github.sha }}
+
+
+  tagging:
+    name: Create Git Tag
+    runs-on: ubuntu-latest
+    needs: push  # ← ממתין שהדחיפה ל-DockerHub תצליח
+    permissions:
+      contents: write  # נדרש כדי ליצור ולדחוף tags
+
+    if: |
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci/cd') &&
+      needs.push.result == 'success'  # ← רק אם Push הצליח!
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # צריך את כל ההיסטוריה
+      
+      - name: Calculate next version
+        id: version
+        run: |
+          # קבלת הגרסה האחרונה
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag: $LATEST_TAG"
+          
+          # חישוב גרסה חדשה
+          VERSION=$(echo $LATEST_TAG | sed 's/v//')
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          
+          # העלאת PATCH ב-1
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+          
+          echo "New version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Create and push tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag ${{ steps.version.outputs.version }}
+          git push origin ${{ steps.version.outputs.version }}
+          echo "✅ Tag ${{ steps.version.outputs.version }} created!"
+
