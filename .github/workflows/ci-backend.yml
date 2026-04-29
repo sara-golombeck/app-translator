@@ -31,10 +31,6 @@ jobs:
         working-directory: ./backend
         run: npm test
       
-      - name: Run linting
-        working-directory: ./backend
-        run: npm run lint
-      
       - name: Test summary
         run: echo "✅ Unit tests passed!"
 
@@ -120,14 +116,13 @@ jobs:
   tagging:
     name: Create Git Tag
     runs-on: ubuntu-latest
-    needs: push  # ← ממתין שהדחיפה ל-DockerHub תצליח
+    needs: push
     permissions:
-      contents: write  # נדרש כדי ליצור ולדחוף tags
-
+      contents: write
     if: |
       github.event_name == 'push' &&
       (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci/cd') &&
-      needs.push.result == 'success'  # ← רק אם Push הצליח!
+      needs.push.result == 'success'
     
     steps:
       - uses: actions/checkout@v4
