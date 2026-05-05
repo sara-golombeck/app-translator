@@ -41,25 +41,13 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
-      
+          aws-region: ${{ secrets.AWS_REGION }}
       
       - name: Sync to S3
         run: |
           aws s3 sync frontend/ s3://${{ secrets.S3_BUCKET_NAME }}/ \
-            --delete \
             --exclude "*.test.js" \
             --exclude "Dockerfile" \
             --exclude ".dockerignore" \
             --exclude "nginx*.conf"
           echo "✅ Deployed to S3!"
-      
-      - name: Set content types
-        run: |
-          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
-            s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
-            --content-type "text/html" --metadata-directive REPLACE
-          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/script.js \
-            s3://${{ secrets.S3_BUCKET_NAME }}/script.js \
-            --content-type "application/javascript" --metadata-directive REPLACE
-          echo "✅ Content types set!"
