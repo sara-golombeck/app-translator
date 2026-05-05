@@ -1,0 +1,29 @@
+name: Deploy to Production (Self-Hosted)
+
+on:
+  workflow_run:
+    workflows: ["Backend CI"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: self-hosted  # ← רץ על השרת שלך!
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+      - name: Navigate to project
+        run: cd /home/ubuntu/app-translator
+      
+      - name: Pull latest images
+        run: docker compose pull
+      
+      - name: Restart services
+        run: docker compose up -d
+      
+      - name: Cleanup
+        run: docker system prune -f
+      
+      - name: Deployment complete
+        run: echo "✅ Deployed successfully!"
