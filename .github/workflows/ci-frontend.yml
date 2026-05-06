@@ -25,6 +25,8 @@ jobs:
       - name: Verify files
         run: |
           ls -la frontend/
+
+
           
           echo "✅ Frontend files ready!"
 
