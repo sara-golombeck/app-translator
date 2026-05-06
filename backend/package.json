@@ -2,7 +2,9 @@
 "name": "translation-backend",
 "type": "module",
 "scripts": {
-"start": "node server.js"
+"start": "node server.js",
+"test": "node --test server.test.js",
+"lint": "echo 'Linting...'; grep -r 'console.log' . --include='*.js' --exclude='*.test.js' || echo 'No console.log found'"
 },
 "dependencies": {
 "cors": "^2.8.5",

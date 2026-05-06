@@ -1,0 +1,50 @@
+backend:
+  image: sara3259/app-translator-backend:latest
+  replicas: 2
+  port: 3001
+
+frontend:
+  image: sara3259/app-translator-frontend:latest
+  replicas: 2
+  port: 80
+
+translator:
+  image: libretranslate/libretranslate:latest
+  replicas: 1
+  port: 5000
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "4Gi"
+      cpu: "2000m"
+
+# PostgreSQL Helm Chart configuration
+postgresql:
+  auth:
+    postgresPassword: postgres 
+    username: postgres           
+    password: postgres        
+    database: translations      
+  primary:
+    initdb:
+      scripts:
+        init.sql: |
+          CREATE TABLE IF NOT EXISTS translations (
+            id SERIAL PRIMARY KEY,
+            source_text TEXT NOT NULL,
+            translated_text TEXT NOT NULL,
+            source_lang VARCHAR(10),
+            target_lang VARCHAR(10),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+    persistence:
+      enabled: true
+      size: 10Gi
+    nodeSelector:
+      kubernetes.io/hostname: minikube
+
+ingress:
+  enabled: true
+  host: translator.local
